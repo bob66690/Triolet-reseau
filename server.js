@@ -17,7 +17,10 @@ app.use(express.static("."));
 io.on("connection",(socket)=>{
 
     socket.on("createRoom",(playerName)=>{
-
+console.log(
+    "Création salon par",
+    playerName
+);
         const roomCode =
             Math.random()
               .toString(36)
@@ -48,7 +51,11 @@ io.on("connection",(socket)=>{
     socket.on(
         "joinRoom",
         ({roomCode,playerName})=>{
-
+console.log(
+    "Rejoint salon",
+    roomCode,
+    playerName
+);
             roomCode =
                 roomCode.toUpperCase();
 
