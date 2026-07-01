@@ -24,6 +24,11 @@ const SPECS = (function(){
   return m;
 })();
 
+
+let socket = null;
+let currentRoom = null;
+
+
 let G       = null;
 let selIdx  = null;
 let echSel  = [];
@@ -1551,6 +1556,9 @@ function prepareStartDraw(){
 //  INIT
 // =====================================================
 document.addEventListener('DOMContentLoaded',()=>{
+
+socket = io();
+
 
   // Construire coordonnées
   function buildCoords(){
