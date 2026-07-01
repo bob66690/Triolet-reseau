@@ -1,3 +1,4 @@
+const rooms = {};
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -15,18 +16,67 @@ app.use(express.static("."));
 
 io.on("connection",(socket)=>{
 
-    console.log(
-        "Utilisateur connecté :",
-        socket.id
-    );
+    socket.on("createRoom",(playerName)=>{
 
-    socket.on("disconnect",()=>{
+        const roomCode =
+            Math.random()
+              .toString(36)
+              .substring(2,8)
+              .toUpperCase();
 
-        console.log(
-            "Utilisateur déconnecté :",
-            socket.id
+        rooms[roomCode] = {
+
+            players:[{
+                id:socket.id,
+                name:playerName
+            }]
+        };
+
+        socket.join(roomCode);
+
+        socket.emit(
+            "roomCreated",
+            roomCode
+        );
+
+        io.to(roomCode).emit(
+            "playersUpdate",
+            rooms[roomCode].players
         );
     });
+
+    socket.on(
+        "joinRoom",
+        ({roomCode,playerName})=>{
+
+            roomCode =
+                roomCode.toUpperCase();
+
+            if(!rooms[roomCode]){
+
+                socket.emit(
+                    "joinError",
+                    "Salon introuvable"
+                );
+
+                return;
+            }
+
+            rooms[roomCode].players.push({
+
+                id:socket.id,
+                name:playerName
+
+            });
+
+            socket.join(roomCode);
+
+            io.to(roomCode).emit(
+                "playersUpdate",
+                rooms[roomCode].players
+            );
+        }
+    );
 
 });
 
