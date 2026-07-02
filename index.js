@@ -1571,6 +1571,12 @@ socket.on(
   roomCode=>{
 
     currentRoom = roomCode;
+	
+	// on fait disparaitre le jeu solo
+	document.getElementById(
+    "screen-lobby"
+).style.display = "none";
+	// fin
 
     document
       .getElementById("room-info")
@@ -1596,9 +1602,17 @@ socket.on(
       .getElementById("players-list")
       .innerHTML =
       players
-      .map(p=>"• "+p.name)
-      .join("<br>");
+		.map(p=>
 
+			p.isAI
+			  ? "🤖 " + p.name
+			  : "👤 " + p.name
+
+		)
+      .join("<br>");
+document.getElementById(
+    "screen-lobby"
+).style.display = "none";
   }
 );
 
@@ -1816,7 +1830,19 @@ document
     );
 
 });
-  
+  document
+.getElementById("btn-add-ai")
+.addEventListener("click",()=>{
+
+    if(!currentRoom)
+        return;
+
+    socket.emit(
+        "addAI",
+        currentRoom
+    );
+
+});
   
 });
 

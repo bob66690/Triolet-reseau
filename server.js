@@ -15,6 +15,74 @@ const io = new Server(server,{
 app.use(express.static("."));
 
 io.on("connection",(socket)=>{
+socket.on(
+    "addAI",
+    roomCode=>{
+
+        const room =
+            rooms[roomCode];
+
+        if(!room)
+            return;
+
+        if(room.host !== socket.id)
+            return;
+
+        const aiCount =
+            room.players.filter(
+                p=>p.isAI
+            ).length + 1;
+
+        room.players.push({
+
+            id:"AI"+aiCount,
+            name:"IA "+aiCount,
+            isAI:true
+
+        });
+
+        io.to(roomCode).emit(
+            "playersUpdate",
+            room.players
+        );
+
+    }
+);
+
+socket.on(
+    "addAI",
+    roomCode=>{
+
+        const room =
+            rooms[roomCode];
+
+        if(!room)
+            return;
+
+        if(room.host !== socket.id)
+            return;
+
+        const aiCount =
+            room.players.filter(
+                p=>p.isAI
+            ).length + 1;
+
+        room.players.push({
+
+            id:"AI"+aiCount,
+            name:"IA "+aiCount,
+            isAI:true
+
+        });
+
+        io.to(roomCode).emit(
+            "playersUpdate",
+            room.players
+        );
+
+    }
+);
+
 
 socket.on(
     "startGame",
@@ -53,7 +121,8 @@ console.log(
 
 			players:[{
 			id:socket.id,
-			name:playerName
+			name:playerName,
+			 isAI:false
 			}]
 		};
 
@@ -94,7 +163,8 @@ console.log(
             rooms[roomCode].players.push({
 
                 id:socket.id,
-                name:playerName
+                name:playerName,
+				isAI:false
 
             });
 
