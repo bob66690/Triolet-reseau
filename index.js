@@ -1604,20 +1604,7 @@ socket.on(
   players=>{
 
 
-document.getElementById(
-    "network-lobby"
-).style.display = "block";
 
-document.getElementById(
-    "btn-add-ai"
-).style.display =
-    isHost ? "inline-block" : "none";
-
-document.getElementById(
-    "btn-start-room"
-).style.display =
-    isHost ? "inline-block" : "none";
-	
 	
 	
     document
