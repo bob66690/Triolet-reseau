@@ -1577,6 +1577,14 @@ socket.on(
       .textContent =
       "Salon : " + roomCode;
 
+
+document
+.getElementById(
+    "btn-start-room"
+)
+.style.display =
+    "inline-block";
+	
   }
 );
 
@@ -1593,6 +1601,18 @@ socket.on(
 
   }
 );
+
+socket.on(
+    "gameStarted",
+    ()=>{
+
+        alert(
+            "La partie démarre !"
+        );
+
+    }
+);
+
 
 socket.on(
   "joinError",
@@ -1782,6 +1802,20 @@ document
 
 });
   
+  
+  document
+.getElementById("btn-start-room")
+.addEventListener("click",()=>{
+
+    if(!currentRoom)
+        return;
+
+    socket.emit(
+        "startGame",
+        currentRoom
+    );
+
+});
   
   
 });

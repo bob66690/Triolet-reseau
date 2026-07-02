@@ -16,6 +16,26 @@ app.use(express.static("."));
 
 io.on("connection",(socket)=>{
 
+socket.on(
+    "startGame",
+    roomCode=>{
+
+        const room =
+            rooms[roomCode];
+
+        if(!room)
+            return;
+
+        if(room.host !== socket.id)
+            return;
+
+        io.to(roomCode).emit(
+            "gameStarted"
+        );
+
+    }
+);
+
     socket.on("createRoom",(playerName)=>{
 console.log(
     "Création salon par",
@@ -29,11 +49,13 @@ console.log(
 
         rooms[roomCode] = {
 
-            players:[{
-                id:socket.id,
-                name:playerName
-            }]
-        };
+			host: socket.id,
+
+			players:[{
+			id:socket.id,
+			name:playerName
+			}]
+		};
 
         socket.join(roomCode);
 
