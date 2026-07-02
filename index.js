@@ -27,7 +27,7 @@ const SPECS = (function(){
 
 let socket = null;
 let currentRoom = null;
-
+let isHost = false;
 
 let G       = null;
 let selIdx  = null;
@@ -1571,7 +1571,12 @@ socket.on(
   roomCode=>{
 
     currentRoom = roomCode;
+	isHost = true;
 	
+	document.getElementById(
+    "network-lobby"
+	).style.display = "block";
+
 	// on fait disparaitre le jeu solo
 	document.getElementById(
     "screen-lobby"
@@ -1598,6 +1603,23 @@ socket.on(
   "playersUpdate",
   players=>{
 
+
+document.getElementById(
+    "network-lobby"
+).style.display = "block";
+
+document.getElementById(
+    "btn-add-ai"
+).style.display =
+    isHost ? "inline-block" : "none";
+
+document.getElementById(
+    "btn-start-room"
+).style.display =
+    isHost ? "inline-block" : "none";
+	
+	
+	
     document
       .getElementById("players-list")
       .innerHTML =
@@ -1620,12 +1642,36 @@ socket.on(
     "gameStarted",
     ()=>{
 
-        alert(
-            "La partie démarre !"
-        );
+        document.getElementById(
+            "network-test"
+        ).style.display = "none";
+
+        document.getElementById(
+            "screen-game"
+        ).style.display = "block";
+
+        document.getElementById(
+            "screen-lobby"
+        ).style.display = "none";
+
+        G=newGame([
+            {
+                name:"Bob",
+                isAI:false
+            },
+            {
+                name:"Raph",
+                isAI:false
+            }
+        ]);
+
+        buildCoords();
+
+        prepareStartDraw();
 
     }
 );
+`
 
 
 socket.on(
