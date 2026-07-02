@@ -1558,7 +1558,50 @@ function prepareStartDraw(){
 document.addEventListener('DOMContentLoaded',()=>{
 
 socket = io();
+socket.on("connect",()=>{
 
+    console.log(
+        "Connecté :",
+        socket.id
+    );
+
+});
+socket.on(
+  "roomCreated",
+  roomCode=>{
+
+    currentRoom = roomCode;
+
+    document
+      .getElementById("room-info")
+      .textContent =
+      "Salon : " + roomCode;
+
+  }
+);
+
+socket.on(
+  "playersUpdate",
+  players=>{
+
+    document
+      .getElementById("players-list")
+      .innerHTML =
+      players
+      .map(p=>"• "+p.name)
+      .join("<br>");
+
+  }
+);
+
+socket.on(
+  "joinError",
+  msg=>{
+
+    alert(msg);
+
+  }
+);
 
   // Construire coordonnées
   function buildCoords(){
@@ -1695,6 +1738,52 @@ socket = io();
     render();
     if(!G.over&&G.joueurs[G.cur].isAI)setTimeout(aiTurn,800);
   }
+  
+  document
+.getElementById("btn-create-room")
+.addEventListener("click",()=>{
+
+    const playerName =
+      document
+      .getElementById("player-name")
+      .value
+      .trim();
+
+    socket.emit(
+      "createRoom",
+      playerName
+    );
+
+});
+
+document
+.getElementById("btn-join-room")
+.addEventListener("click",()=>{
+
+    const playerName =
+      document
+      .getElementById("player-name")
+      .value
+      .trim();
+
+    const roomCode =
+      document
+      .getElementById("room-code")
+      .value
+      .trim();
+
+    socket.emit(
+      "joinRoom",
+      {
+        roomCode,
+        playerName
+      }
+    );
+
+});
+  
+  
+  
 });
 
 
