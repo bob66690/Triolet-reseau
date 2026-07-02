@@ -1696,3 +1696,6 @@ socket = io();
     if(!G.over&&G.joueurs[G.cur].isAI)setTimeout(aiTurn,800);
   }
 });
+
+
+
