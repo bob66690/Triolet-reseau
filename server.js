@@ -1,4 +1,80 @@
 const rooms = {};
+
+const DISTRIB = {
+  0:9,1:9,2:8,3:8,4:7,5:8,6:6,
+  7:6,8:4,9:4,10:3,11:3,12:2,
+  13:2,14:1,15:1
+};
+function shuffle(a){
+
+    for(let i=a.length-1;i>0;i--){
+
+        const j =
+          Math.floor(
+            Math.random()*(i+1)
+          );
+
+        [a[i],a[j]] =
+        [a[j],a[i]];
+    }
+}
+function createGame(players){
+
+    const sac = [];
+
+    Object.entries(DISTRIB)
+    .forEach(([v,q])=>{
+
+        for(let i=0;i<q;i++){
+
+            sac.push({
+                val:Number(v),
+                isJoker:false
+            });
+
+        }
+    });
+
+    sac.push({
+        val:null,
+        isJoker:true
+    });
+
+    sac.push({
+        val:null,
+        isJoker:true
+    });
+
+    shuffle(sac);
+
+    sac.splice(0,3);
+
+    const joueurs =
+    players.map(p=>({
+
+        name:p.name,
+
+        isAI:p.isAI,
+
+        score:0,
+
+        hand:sac.splice(-3,3)
+
+    }));
+
+    return {
+
+        joueurs,
+
+        sac,
+
+        cur:0
+
+    };
+
+}
+
+
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
@@ -65,9 +141,14 @@ socket.on(
         if(room.host !== socket.id)
             return;
 
+        room.game =
+            createGame(
+                room.players
+            );
+
         io.to(roomCode).emit(
             "gameStarted",
-            room.players
+            room.game
         );
 
     }

@@ -1627,7 +1627,7 @@ document.getElementById(
 
 socket.on(
     "gameStarted",
-    players=>{
+    gameState=>{
 
         document.getElementById(
             "network-test"
@@ -1641,7 +1641,13 @@ socket.on(
             "screen-game"
         ).style.display = "block";
 
-        G = newGame(players);
+        G = {
+
+            ...newGame([]),
+
+            ...gameState
+
+        };
 
         buildCoords();
 
@@ -1649,7 +1655,6 @@ socket.on(
 
     }
 );
-
 
 
 socket.on(
