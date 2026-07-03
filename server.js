@@ -186,19 +186,61 @@ socket.on(
         const game =
             room.game;
 
-        data.move.forEach(m=>{
+        const currentPlayer =
+    game.joueurs[game.cur];
 
-            game.board[m.r][m.c] = {
+data.move.forEach(m=>{
 
-                val:m.val,
+    game.board[m.r][m.c] = {
 
-                isJoker:m.isJoker,
+        val:m.val,
 
-                jokerVal:m.jokerVal
+        isJoker:m.isJoker,
 
-            };
+        jokerVal:m.jokerVal
 
-        });
+    };
+
+});
+
+/* retirer les jetons joués */
+
+const idxs =
+    [...new Set(
+        data.move.map(m=>m.hi)
+    )]
+    .sort((a,b)=>b-a);
+
+idxs.forEach(i=>{
+
+    currentPlayer.hand.splice(
+        i,
+        1
+    );
+
+});
+
+/* repiocher */
+
+idxs.forEach(()=>{
+
+*   if(game.sac.length){
+
+        c*rrentPlayer.hand.push(
+            game.sac.pop()
+        );
+
+    }
+
+});
+
+/* joueur suivant */
+
+game.cur =
+(
+    game.cur + 1
+)*%
+game.joueurs.length;
 
         io.to(data.roomCode).emit(
             "stateUpdate",
