@@ -68,7 +68,22 @@ function createGame(players){
 
         sac,
 
-        cur:0
+        cur:0,
+		
+board:Array(15)
+        .fill(null)
+        .map(()=>Array(15).fill(null)),
+
+    usedSp:[],
+
+    first:true,
+
+    over:false,
+
+    pend:[],
+
+    rejouer:false
+
 
     };
 
@@ -145,6 +160,8 @@ socket.on(
             createGame(
                 room.players
             );
+			
+			
 
         io.to(roomCode).emit(
             "gameStarted",

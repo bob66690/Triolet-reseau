@@ -1648,6 +1648,8 @@ socket.on(
             ...gameState
 
         };
+		window.lastGameState =
+    gameState;
 
         buildCoords();
 
