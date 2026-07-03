@@ -189,6 +189,12 @@ socket.on(
         const currentPlayer =
     game.joueurs[game.cur];
 
+if(
+    currentPlayer.id !== socket.id
+){
+    return;
+}
+
 data.move.forEach(m=>{
 
     game.board[m.r][m.c] = {
@@ -224,9 +230,9 @@ idxs.forEach(i=>{
 
 idxs.forEach(()=>{
 
-*   if(game.sac.length){
+   if(game.sac.length){
 
-        c*rrentPlayer.hand.push(
+        currentPlayer.hand.push(
             game.sac.pop()
         );
 
@@ -239,7 +245,8 @@ idxs.forEach(()=>{
 game.cur =
 (
     game.cur + 1
-)*%
+)
+%
 game.joueurs.length;
 
         io.to(data.roomCode).emit(

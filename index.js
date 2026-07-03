@@ -1721,7 +1721,6 @@ console.log(
 
     }
 );
-
 socket.on(
     "stateUpdate",
     gameState=>{
@@ -1738,6 +1737,10 @@ socket.on(
             new Set(
                 G.usedSp || []
             );
+
+        G.pend = [];
+
+        selIdx = null;
 
         render();
 
@@ -1814,6 +1817,19 @@ socket.on(
   // VALIDER
   document.getElementById('btn-valider').addEventListener('click',()=>{
     if(!G||G.over)return;
+	
+	if(
+    G.joueurs[G.cur].id
+    !==
+    myPlayerId
+){
+    addLog(
+        "Ce n'est pas votre tour",
+        "b"
+    );
+    return;
+}
+	
     if(G.joueurs[G.cur].isAI){addLog('Ce n\'est pas votre tour','b');return;}
    
 console.log(
