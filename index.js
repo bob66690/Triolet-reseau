@@ -28,6 +28,8 @@ const SPECS = (function(){
 let socket = null;
 let currentRoom = null;
 let myPlayerId = null;
+let myPlayerIndex = -1;
+
 let isHost = false;
 
 let G       = null;
@@ -1181,7 +1183,14 @@ function render(){
   renderHand();
   renderScores();
   document.getElementById('sac-ct').textContent=G.sac.length;
-  const pl=G.joueurs[G.cur];
+  
+  const pl =
+    myPlayerIndex >= 0
+    ? G.joueurs[myPlayerIndex]
+    : G.joueurs[G.cur];
+  
+  
+  
   document.getElementById('turn-name').textContent=
     (pl.isAI?'🤖 ':'')+pl.name;
 }
@@ -1266,7 +1275,18 @@ function makeTok(t,isPend){
 function renderHand(){
   const ct=document.getElementById('hand-tokens');
   ct.innerHTML='';
-  const pl=G.joueurs[G.cur];
+  
+  let pl;
+
+if(myPlayerIndex >= 0){
+
+    pl = G.joueurs[myPlayerIndex];
+
+}else{
+
+    pl = G.joueurs[G.cur];
+
+}
 
   if(pl.isAI){
     ct.innerHTML=
@@ -1675,6 +1695,13 @@ socket.on(
         G.usedSp || []
     );
 	
+	myPlayerIndex =
+    G.joueurs.findIndex(
+        p => p.id === myPlayerId
+    );
+	
+
+
 	console.log(
     "Mon ID :",
     myPlayerId
