@@ -173,6 +173,41 @@ socket.on(
     }
 );
 
+socket.on(
+    "playMove",
+    data=>{
+
+        const room =
+            rooms[data.roomCode];
+
+        if(!room)
+            return;
+
+        const game =
+            room.game;
+
+        data.move.forEach(m=>{
+
+            game.board[m.r][m.c] = {
+
+                val:m.val,
+
+                isJoker:m.isJoker,
+
+                jokerVal:m.jokerVal
+
+            };
+
+        });
+
+        io.to(data.roomCode).emit(
+            "stateUpdate",
+            game
+        );
+
+    }
+);
+
     socket.on("createRoom",(playerName)=>{
 console.log(
     "Création salon par",

@@ -1695,6 +1695,28 @@ console.log(
     }
 );
 
+socket.on(
+    "stateUpdate",
+    gameState=>{
+
+        G = {
+
+            ...G,
+
+            ...gameState
+
+        };
+
+        G.usedSp =
+            new Set(
+                G.usedSp || []
+            );
+
+        render();
+
+    }
+);
+
 
 socket.on(
   "joinError",
@@ -1772,7 +1794,19 @@ console.log(
     G.pend
 );
 
-   playMove();
+   socket.emit(
+    "playMove",
+    {
+
+        roomCode:
+            currentRoom,
+
+        move:
+            G.pend
+
+    }
+);
+
   });
 
   // ANNULER
