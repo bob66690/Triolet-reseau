@@ -1309,6 +1309,15 @@ function renderScores(){
 function selectTok(i){
   if(G.over)return;
   if(G.joueurs[G.cur].isAI)return;
+  
+  if(
+      G.joueurs[G.cur].id
+      !==
+      myPlayerId
+  ){
+      return;
+  }
+  
   if(G.pend.some(p=>p.hi===i))return;
   selIdx=(selIdx===i)?null:i;
   render();
@@ -1317,6 +1326,16 @@ function selectTok(i){
 function onCellClick(r,c){
   if(G.over)return;
   if(G.joueurs[G.cur].isAI)return;
+  
+  if(
+      G.joueurs[G.cur].id
+      !==
+      myPlayerId
+  ){
+      return;
+  }
+  
+  
   if(selIdx===null){addLog('Sélectionnez d\'abord un jeton','b');return;}
   if(G.board[r][c])return;
   if(G.pend.some(p=>p.r===r&&p.c===c))return;
