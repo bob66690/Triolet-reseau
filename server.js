@@ -195,10 +195,13 @@ console.log(
 
         socket.join(roomCode);
 
-        socket.emit(
-            "roomCreated",
-            roomCode
-        );
+       socket.emit(
+    "roomCreated",
+    {
+        roomCode,
+        playerId: socket.id
+    }
+);
 
         io.to(roomCode).emit(
             "playersUpdate",
@@ -236,6 +239,14 @@ console.log(
             });
 
             socket.join(roomCode);
+			
+			socket.emit(
+    "joinedRoom",
+    {
+        roomCode,
+        playerId: socket.id
+    }
+);
 
             io.to(roomCode).emit(
                 "playersUpdate",

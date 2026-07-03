@@ -27,6 +27,7 @@ const SPECS = (function(){
 
 let socket = null;
 let currentRoom = null;
+let myPlayerId = null;
 let isHost = false;
 
 let G       = null;
@@ -1568,9 +1569,10 @@ socket.on("connect",()=>{
 });
 socket.on(
   "roomCreated",
-  roomCode=>{
+  data=>{
 
-    currentRoom = roomCode;
+    currentRoom = data.roomCode;
+	myPlayerId = data.playerId;
 	isHost = true;
 	
 	document.getElementById(
@@ -1586,7 +1588,7 @@ socket.on(
     document
       .getElementById("room-info")
       .textContent =
-      "Salon : " + roomCode;
+      "Salon : " + data.roomCode;
 
 
 document
@@ -1671,6 +1673,19 @@ socket.on(
     alert(msg);
 
   }
+);
+
+//ajout 3/7/26 reseu
+socket.on(
+    "joinedRoom",
+    data=>{
+
+        currentRoom =
+            data.roomCode;
+
+        myPlayerId =
+            data.playerId;
+    }
 );
 
   // Construire coordonnées
