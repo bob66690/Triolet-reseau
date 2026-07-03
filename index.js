@@ -1648,6 +1648,11 @@ socket.on(
             ...gameState
 
         };
+		
+		G.usedSp =
+    new Set(
+        G.usedSp || []
+    );
 		window.lastGameState =
     gameState;
 
