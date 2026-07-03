@@ -1790,7 +1790,9 @@ socket.on(
   document.getElementById('btn-lm').addEventListener('click',()=>setLog('min'));
 
   // ── CHARGEMENT PARTIE SAUVEGARDÉE ──
-  const saved=loadGame();
+  //const saved=loadGame();
+  const saved=null;
+  
   if(saved){
     // Une partie est en cours
     G=saved;
