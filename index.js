@@ -1603,7 +1603,7 @@ socket.on(
   "playersUpdate",
   players=>{
 
-
+window.roomPlayers = players;
 
 	
 	
@@ -1627,30 +1627,21 @@ document.getElementById(
 
 socket.on(
     "gameStarted",
-    ()=>{
+    players=>{
 
         document.getElementById(
             "network-test"
         ).style.display = "none";
 
         document.getElementById(
-            "screen-game"
-        ).style.display = "block";
-
-        document.getElementById(
             "screen-lobby"
         ).style.display = "none";
 
-        G=newGame([
-            {
-                name:"Bob",
-                isAI:false
-            },
-            {
-                name:"Raph",
-                isAI:false
-            }
-        ]);
+        document.getElementById(
+            "screen-game"
+        ).style.display = "block";
+
+        G = newGame(players);
 
         buildCoords();
 

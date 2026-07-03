@@ -66,7 +66,8 @@ socket.on(
             return;
 
         io.to(roomCode).emit(
-            "gameStarted"
+            "gameStarted",
+            room.players
         );
 
     }
