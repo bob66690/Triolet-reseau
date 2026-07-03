@@ -1766,7 +1766,13 @@ socket.on(
   document.getElementById('btn-valider').addEventListener('click',()=>{
     if(!G||G.over)return;
     if(G.joueurs[G.cur].isAI){addLog('Ce n\'est pas votre tour','b');return;}
-    playMove();
+   
+console.log(
+    "COUP A ENVOYER",
+    G.pend
+);
+
+   playMove();
   });
 
   // ANNULER
