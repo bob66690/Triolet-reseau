@@ -1655,6 +1655,17 @@ socket.on(
     new Set(
         G.usedSp || []
     );
+	
+	console.log(
+    "Mon ID :",
+    myPlayerId
+);
+
+console.log(
+    "Tour de :",
+    G.joueurs[G.cur].id
+);
+
 		window.lastGameState =
     gameState;
 

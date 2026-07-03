@@ -49,18 +49,20 @@ function createGame(players){
 
     sac.splice(0,3);
 
-    const joueurs =
-    players.map(p=>({
+const joueurs =
+players.map(p=>({
 
-        name:p.name,
+    id:p.id,
 
-        isAI:p.isAI,
+    name:p.name,
 
-        score:0,
+    isAI:p.isAI,
 
-        hand:sac.splice(-3,3)
+    score:0,
 
-    }));
+    hand:sac.splice(-3,3)
+
+}));
 
     return {
 
