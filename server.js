@@ -31,6 +31,107 @@ function scoreVal(t){
 
 }
 
+function getLine(board,r,c,dr,dc){
+
+    let sr=r,sc=c;
+
+    while(
+        sr-dr>=0 &&
+        sr-dr<15 &&
+        sc-dc>=0 &&
+        sc-dc<15 &&
+        board[sr-dr][sc-dc]!==null
+    ){
+        sr-=dr;
+        sc-=dc;
+    }
+
+    const line=[];
+
+    let cr=sr;
+    let cc=sc;
+
+    while(
+        cr>=0 &&
+        cr<15 &&
+        cc>=0 &&
+        cc<15 &&
+        board[cr][cc]!==null
+    ){
+        line.push({
+            r:cr,
+            c:cc,
+            tok:board[cr][cc]
+        });
+
+        cr+=dr;
+        cc+=dc;
+    }
+
+    return line;
+}
+
+function affectedLines(game,move){
+
+    const board =
+        game.board.map(
+            row => row.map(
+                c => c ? {...c} : null
+            )
+        );
+
+    move.forEach(m=>{
+
+        board[m.r][m.c]={
+            val:m.val,
+            isJoker:m.isJoker,
+            jokerVal:m.jokerVal
+        };
+
+    });
+
+    const res=[];
+    const seen=new Set();
+
+    move.forEach(p=>{
+
+        [
+            ['H',0,1],
+            ['V',1,0]
+        ].forEach(([axis,dr,dc])=>{
+
+            const k =
+                axis +
+                (dr===0 ? p.r : p.c);
+
+            if(seen.has(k))
+                return;
+
+            seen.add(k);
+
+            const l =
+                getLine(
+                    board,
+                    p.r,
+                    p.c,
+                    dr,
+                    dc
+                );
+
+            if(l.length>=2)
+                res.push(l);
+
+        });
+
+    });
+
+    return res;
+
+}
+
+
+
+
 function createGame(players){
 
     const sac = [];
@@ -220,6 +321,20 @@ socket.on(
 
         const game =
             room.game;
+			
+// ajout temporaire
+const lines =
+    affectedLines(
+        game,
+        data.move
+    );
+
+console.log(
+    "LINES",
+    JSON.stringify(lines)
+);
+//fin			
+			
 
         const currentPlayer =
     game.joueurs[game.cur];
