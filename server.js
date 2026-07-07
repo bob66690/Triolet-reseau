@@ -18,6 +18,22 @@ function shuffle(a){
         [a[j],a[i]];
     }
 }
+
+function scoreVal(t){
+
+    if(!t)
+        return 0;
+
+    if(t.isJoker)
+        return 0;
+
+    return t.val;
+
+}
+`
+
+
+
 function createGame(players){
 
     const sac = [];
@@ -308,16 +324,12 @@ idxs.forEach(()=>{
 // ajout calcul points
 /* calcul simple des points */
 
+
 let pts = 0;
 
 data.move.forEach(m=>{
 
-    if(
-        m.val !== null &&
-        m.val !== undefined
-    ){
-        pts += m.val;
-    }
+    pts += scoreVal(m);
 
 });
 
