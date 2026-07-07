@@ -189,6 +189,16 @@ socket.on(
         const currentPlayer =
     game.joueurs[game.cur];
 	
+	console.log(
+    "CUR SERVEUR =",
+    game.cur
+);
+
+console.log(
+    "JOUEUR SERVEUR =",
+    currentPlayer.name
+);
+	
 	console.log("SOCKET", socket.id);
 console.log("CURRENT", currentPlayer.id);
 console.log("PLAYER", currentPlayer.name);

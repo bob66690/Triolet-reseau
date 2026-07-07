@@ -1569,8 +1569,8 @@ function prepareStartDraw(){
         }
     });
 
-    G.cur = winnerIndex;
-    G.startPlayer = winnerIndex;
+  //  G.cur = winnerIndex;
+  //  G.startPlayer = winnerIndex;
 
     const ct = document.getElementById('start-draw-results');
 
