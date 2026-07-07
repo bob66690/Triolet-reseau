@@ -5,6 +5,53 @@ const DISTRIB = {
   7:6,8:4,9:4,10:3,11:3,12:2,
   13:2,14:1,15:1
 };
+
+const SPECS = {};
+
+function addSpec(list,type){
+
+    list.forEach(s=>{
+
+        const r =
+            s.charCodeAt(0)-65;
+
+        const c =
+            parseInt(
+                s.slice(1)
+            ) - 1;
+
+        SPECS[r+","+c] = type;
+
+    });
+
+}
+
+addSpec(
+    ['A8','B2','B14','H1','H15','N2','N14','O8'],
+    'R'
+);
+
+addSpec(
+    ['D8','E5','E11','H4','H12','K5','K11','L8'],
+    'D'
+);
+
+addSpec(
+    ['B5','B11','E2','E14','K2','K14','N5','N11'],
+    'T'
+);
+
+addSpec(
+    ['H8'],
+    'C'
+);
+
+
+
+
+
+
+
 function shuffle(a){
 
     for(let i=a.length-1;i>0;i--){
@@ -30,6 +77,24 @@ function scoreVal(t){
     return t.val;
 
 }
+
+function specAt(game,r,c){
+
+    const k =
+        r + "," + c;
+
+    if(
+        game.usedSp &&
+        game.usedSp.includes(k)
+    ){
+        return null;
+    }
+
+    return SPECS[k] || null;
+}
+
+
+
 
 function getLine(board,r,c,dr,dc){
 
@@ -401,7 +466,30 @@ const valeurs = [];
 
 data.move.forEach(m=>{
 
-    pts += scoreVal(m);
+    let val =
+        scoreVal(m);
+
+    const sp =
+        specAt(
+            game,
+            m.r,
+            m.c
+        );
+
+    if(
+        sp === "D" ||
+        sp === "C"
+    ){
+        val *= 2;
+    }
+
+    if(
+        sp === "T"
+    ){
+        val *= 3;
+    }
+
+    pts += val;
 
     valeurs.push(
         m.isJoker
@@ -435,6 +523,39 @@ currentPlayer.score += pts;
 
 
 // fin ajaout calcul points
+
+//cases consommees
+if(
+    !game.usedSp
+){
+    game.usedSp = [];
+}
+
+data.move.forEach(m=>{
+
+    const sp =
+        SPECS[
+            m.r + "," + m.c
+        ];
+
+    if(sp){
+
+        const k =
+            m.r + "," + m.c;
+
+        if(
+            !game.usedSp.includes(k)
+        ){
+            game.usedSp.push(k);
+        }
+
+    }
+
+});
+
+
+
+
 
 
 /* joueur suivant */
