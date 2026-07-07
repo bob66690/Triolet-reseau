@@ -240,6 +240,26 @@ idxs.forEach(()=>{
 
 });
 
+// ajout calcul points
+/* calcul simple des points */
+
+let pts = 0;
+
+data.move.forEach(m=>{
+
+    if(
+        m.val !== null &&
+        m.val !== undefined
+    ){
+        pts += m.val;
+    }
+
+});
+
+currentPlayer.score += pts;
+// fin ajaout calcul points
+
+
 /* joueur suivant */
 
 game.cur =
