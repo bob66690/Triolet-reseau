@@ -200,11 +200,33 @@ console.log("PLAYER", currentPlayer.name);
     currentPlayer.name
 	);
 
+console.log(
+    "SOCKET:",
+    socket.id
+);
+
+console.log(
+    "CURRENT:",
+    currentPlayer.id
+);
+
+console.log(
+    "PLAYER:",
+    currentPlayer.name
+);
+
 if(
     currentPlayer.id !== socket.id
 ){
+    console.log(
+        "REFUSE"
+    );
     return;
 }
+
+console.log(
+    "ACCEPTE"
+);
 
 data.move.forEach(m=>{
 
