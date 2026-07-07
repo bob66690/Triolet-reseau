@@ -30,9 +30,6 @@ function scoreVal(t){
     return t.val;
 
 }
-`
-
-
 
 function createGame(players){
 
@@ -227,54 +224,13 @@ socket.on(
         const currentPlayer =
     game.joueurs[game.cur];
 	
-	console.log(
-    "CUR SERVEUR =",
-    game.cur
-);
-
-console.log(
-    "JOUEUR SERVEUR =",
-    currentPlayer.name
-);
-	
-	console.log("SOCKET", socket.id);
-console.log("CURRENT", currentPlayer.id);
-console.log("PLAYER", currentPlayer.name);
-
-	console.log(
-    "PLAYMOVE",
-    socket.id,
-    currentPlayer.id,
-    currentPlayer.name
-	);
-
-console.log(
-    "SOCKET:",
-    socket.id
-);
-
-console.log(
-    "CURRENT:",
-    currentPlayer.id
-);
-
-console.log(
-    "PLAYER:",
-    currentPlayer.name
-);
 
 if(
     currentPlayer.id !== socket.id
 ){
-    console.log(
-        "REFUSE"
-    );
     return;
 }
 
-console.log(
-    "ACCEPTE"
-);
 
 data.move.forEach(m=>{
 
@@ -344,23 +300,22 @@ data.move.forEach(m=>{
 
 if(
     valeurs.length === 3
-){*
+){
     const somme =
-        valeurs*reduce(
+        valeurs.reduce(
             (a,b)=>a+b,
-  *         0
+            0
         );
 
     if(
-   *    somme === 15
+        somme === 15
     ){
-        pt* = 30;
-   *}
+        pts = 30;
+    }
 
 }
 
 currentPlayer.score += pts;
-*
 
 
 
