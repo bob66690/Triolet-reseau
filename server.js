@@ -64,13 +64,35 @@ players.map(p=>({
 
 }));
 
+
+let winnerIndex = 0;
+let bestValue = -1;
+
+joueurs.forEach((j,i)=>{
+
+    const highest =
+        Math.max(
+            ...j.hand.map(
+                t=>t.isJoker ? -1 : t.val
+            )
+        );
+
+    if(highest > bestValue){
+
+        bestValue = highest;
+
+        winnerIndex = i;
+
+    }
+});
+
     return {
 
         joueurs,
 
         sac,
 
-        cur:0,
+        cur:winnerIndex,
 		
 board:Array(15)
         .fill(null)
