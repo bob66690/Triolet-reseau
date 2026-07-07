@@ -324,16 +324,46 @@ idxs.forEach(()=>{
 // ajout calcul points
 /* calcul simple des points */
 
-
 let pts = 0;
+
+const valeurs = [];
 
 data.move.forEach(m=>{
 
     pts += scoreVal(m);
 
+    valeurs.push(
+        m.isJoker
+            ? 0
+            : m.val
+    );
+
 });
 
+/* règle du trio */
+
+if(
+    valeurs.length === 3
+){*
+    const somme =
+        valeurs*reduce(
+            (a,b)=>a+b,
+  *         0
+        );
+
+    if(
+   *    somme === 15
+    ){
+        pt* = 30;
+   *}
+
+}
+
 currentPlayer.score += pts;
+*
+
+
+
 // fin ajaout calcul points
 
 
