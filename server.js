@@ -189,6 +189,10 @@ socket.on(
         const currentPlayer =
     game.joueurs[game.cur];
 	
+	console.log("SOCKET", socket.id);
+console.log("CURRENT", currentPlayer.id);
+console.log("PLAYER", currentPlayer.name);
+
 	console.log(
     "PLAYMOVE",
     socket.id,
