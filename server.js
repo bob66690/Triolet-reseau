@@ -386,7 +386,9 @@ socket.on(
 
         const game =
             room.game;
-			
+			if(game.over){
+    return;
+}
 // ajout temporaire
 
 const lines =
@@ -658,6 +660,42 @@ else{
 }
 
 currentPlayer.score += pts;
+
+if(
+    game.sac.length === 0 &&
+    currentPlayer.hand.length === 0
+){
+
+    let bonus = 0;
+
+    game.joueurs.forEach(j=>{
+
+        if(j === currentPlayer)
+            return;
+
+        j.hand.forEach(t=>{
+
+            if(!t.isJoker){
+
+                bonus += t.val;
+
+            }
+
+        });
+
+    });
+
+    currentPlayer.score += bonus;
+
+    game.over = true;
+
+}
+if(
+    game.sac.length === 0 &&
+    currentPlayer.hand.length === 0
+){
+    game.over = true;
+}
 console.log(
     "POINTS",
     pts,
@@ -666,6 +704,27 @@ console.log(
 );
 
 // fin ajaout calcul points
+// rejouer
+let rejouer = false;
+
+data.move.forEach(m=>{
+
+    const sp =
+        specAt(
+            game,
+            m.r,
+            m.c
+        );
+
+    if(sp === "R"){
+
+        rejouer = true;
+
+    }
+
+});
+
+
 
 //cases consommees
 if(
@@ -703,13 +762,18 @@ data.move.forEach(m=>{
 
 /* joueur suivant */
 
-game.cur =
-(
-    game.cur + 1
-)
-%
-game.joueurs.length;
+if(!rejouer){
 
+    game.cur =
+    (
+        game.cur + 1
+    )
+    %
+    game.joueurs.length;
+
+}
+
+game.rejouer = rejouer;
         io.to(data.roomCode).emit(
             "stateUpdate",
             game
@@ -814,7 +878,9 @@ socket.on(
 
         const game =
             room.game;
-
+if(game.over){
+    return;
+}
         const currentPlayer =
             game.joueurs[game.cur];
 
@@ -850,7 +916,9 @@ socket.on(
 
         const game =
             room.game;
-
+if(game.over){
+    return;
+}
         const currentPlayer =
             game.joueurs[game.cur];
 

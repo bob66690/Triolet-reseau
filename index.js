@@ -1758,9 +1758,23 @@ socket.on(
         G.pend = [];
 
         selIdx = null;
+if(G.rejouer){
 
+    addLog(
+        "🔁 Case Rejouer !",
+        "g"
+    );
+
+}
         render();
-
+if(
+    G.over
+){
+    addLog(
+        "🏆 Partie terminée",
+        "g"
+    );
+}
     }
 );
 
