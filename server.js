@@ -586,11 +586,35 @@ else{
 
     data.move.forEach(m=>{
 
-        pts += scoreVal(m);
+        let val =
+            scoreVal(m);
+
+        const sp =
+            specAt(
+                game,
+                m.r,
+                m.c
+            );
+
+        if(
+            sp === "C" ||
+            sp === "D"
+        ){
+            val *= 2;
+        }
+
+        if(
+            sp === "T"
+        ){
+            val *= 3;
+        }
+
+        pts += val;
 
     });
 
 }
+
 currentPlayer.score += pts;
 console.log(
     "POINTS",
