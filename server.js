@@ -481,12 +481,54 @@ if(
             );
 
         if(
-            line.length === 2
-        ){
+    line.length === 2
+){
 
-            pts += sum;
+    let pairPts = 0;
+
+    line.forEach(item=>{
+
+        let val =
+            scoreVal(item.tok);
+
+        const joueCeTour =
+            data.move.find(
+                m =>
+                    m.r === item.r &&
+                    m.c === item.c
+            );
+
+        if(joueCeTour){
+
+            const sp =
+                specAt(
+                    game,
+                    item.r,
+                    item.c
+                );
+
+            if(
+                sp === "C" ||
+                sp === "D"
+            ){
+                val *= 2;
+            }
+
+            if(
+                sp === "T"
+            ){
+                val *= 3;
+            }
 
         }
+
+        pairPts += val;
+
+    });
+
+    pts += pairPts;
+
+}
         else 
 			if(
     line.length === 3
