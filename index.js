@@ -1436,23 +1436,40 @@ function confirmEch(){
   const pl=G.joueurs[G.cur];
 
   if(echSel.length===0){
-    addLog(`⏭️ ${pl.name} passe son tour`,'i');
-    document.getElementById('modal-ech').classList.remove('on');
-    echSel=[];
-    saveGame();
-    finishTurn();
-    return;
-  }
 
-  const sorted=[...echSel].sort((a,b)=>b-a);
-  const removed=sorted.map(i=>pl.hand.splice(i,1)[0]);
-  G.sac.push(...removed);shuffle(G.sac);
-  pl.hand.push(...drawN(G.sac,removed.length));
-  addLog(`🔄 Échange de ${removed.length} jeton(s)`,'i');
-  document.getElementById('modal-ech').classList.remove('on');
-  echSel=[];
-  saveGame();
-  finishTurn();
+    socket.emit(
+        "passTurn",
+        {
+            roomCode:
+                currentRoom
+        }
+    );
+
+    document
+        .getElementById(
+            'modal-ech'
+        )
+        .classList.remove('on');
+
+    echSel = [];
+
+    return;
+
+}
+
+  socket.emit(
+    "exchangeTiles",
+    {
+        roomCode: currentRoom,
+        tiles: echSel
+    }
+);
+
+document
+    .getElementById('modal-ech')
+    .classList.remove('on');
+
+echSel = [];
 }
 
 // ── Journal ──

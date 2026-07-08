@@ -813,3 +813,104 @@ server.listen(PORT,()=>{
         `Serveur démarré sur ${PORT}`
     );
 });
+
+
+
+socket.on(
+    "passTurn",
+    data=>{
+
+        const room =
+            rooms[data.roomCode];
+
+        if(!room) return;
+
+        const game =
+            room.game;
+
+        const currentPlayer =
+            game.joueurs[game.cur];
+
+        if(
+            currentPlayer.id !== socket.id
+        ){
+            return;
+        }
+
+        game.cur =
+        (
+            game.cur + 1
+        )
+        %
+        game.joueurs.length;
+
+        io.to(data.roomCode).emit(
+            "stateUpdate",
+            game
+        );
+
+    }
+);
+
+socket.on(
+    "exchangeTiles",
+    data=>{
+
+        const room =
+            rooms[data.roomCode];
+
+        if(!room) return;
+
+        const game =
+            room.game;
+
+        const currentPlayer =
+            game.joueurs[game.cur];
+
+        if(
+            currentPlayer.id !== socket.id
+        ){
+            return;
+        }
+
+        const sorted =
+            [...data.tiles]
+            .sort((a,b)=>b-a);
+
+        const removed =
+            sorted.map(
+                i =>
+                currentPlayer.hand.splice(i,1)[0]
+            );
+
+        game.sac.push(...removed);
+
+        shuffle(game.sac);
+
+        removed.forEach(()=>{
+
+            if(game.sac.length){
+
+                currentPlayer.hand.push(
+                    game.sac.pop()
+                );
+
+            }
+
+        });
+
+        game.cur =
+        (
+            game.cur + 1
+        )
+        %
+        game.joueurs.length;
+
+        io.to(data.roomCode).emit(
+            "stateUpdate",
+            game
+        );
+
+    }
+);
+
