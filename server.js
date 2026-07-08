@@ -548,8 +548,13 @@ else{
     });
 
 }
-
-
+currentPlayer.score += pts;
+console.log(
+    "POINTS",
+    pts,
+    "TOTAL",
+    currentPlayer.score
+);
 
 // fin ajaout calcul points
 
