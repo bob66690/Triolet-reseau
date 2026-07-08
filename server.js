@@ -487,54 +487,97 @@ if(
             pts += sum;
 
         }
-        else if(
-            line.length === 3
-        ){
+        else 
+			if(
+    line.length === 3
+){
 
-            const evSum =
-                line
-                .map(
-                    x=>
-                        x.tok.isJoker
-                        ? x.tok.jokerVal
-                        : x.tok.val
-                )
-                .reduce(
-                    (a,b)=>a+b,
-                    0
+    const evSum =
+        line
+        .map(
+            x=>
+                x.tok.isJoker
+                ? x.tok.jokerVal
+                : x.tok.val
+        )
+        .reduce(
+            (a,b)=>a+b,
+            0
+        );
+
+    if(
+        evSum === 15
+    ){
+
+        let mult = 1;
+
+        line.forEach(l=>{
+
+            const joueCeTour =
+                data.move.find(
+                    m =>
+                        m.r === l.r &&
+                        m.c === l.c
+                );
+
+            if(!joueCeTour)
+                return;
+
+            const sp =
+                specAt(
+                    game,
+                    l.r,
+                    l.c
                 );
 
             if(
-                evSum === 15
+                sp === "D" ||
+                sp === "C"
             ){
-
-                pts += 30;
-
-                const allNew =
-                    line.every(
-                        l=>
-                            data.move.some(
-                                m=>
-                                    m.r===l.r &&
-                                    m.c===l.c
-                            )
-                    );
-
-                const hasJoker =
-                    line.some(
-                        l=>l.tok.isJoker
-                    );
-
-                if(
-                    allNew &&
-                    !hasJoker
-                ){
-                    pts += 50;
-                }
-
+                mult = Math.max(
+                    mult,
+                    2
+                );
             }
 
+            if(
+                sp === "T"
+            ){
+                mult = Math.max(
+                    mult,
+                    3
+                );
+            }
+
+        });
+
+        pts += 30 * mult;
+
+        const allNew =
+            line.every(
+                l=>
+                    data.move.some(
+                        m=>
+                            m.r===l.r &&
+                            m.c===l.c
+                    )
+            );
+
+        const hasJoker =
+            line.some(
+                l=>l.tok.isJoker
+            );
+
+        if(
+            allNew &&
+            !hasJoker
+        ){
+            pts += 50;
         }
+
+    }
+
+}
 
     });
 
