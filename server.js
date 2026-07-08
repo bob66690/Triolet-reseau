@@ -388,12 +388,13 @@ socket.on(
             room.game;
 			
 // ajout temporaire
+
 const lines =
     affectedLines(
         game,
         data.move
     );
-
+	
 console.log(
     "LINES",
     JSON.stringify(lines)
@@ -458,67 +459,95 @@ idxs.forEach(()=>{
 });
 
 // ajout calcul points
-/* calcul simple des points */
+/* calcul compliqué des points */
 
 let pts = 0;
 
-const valeurs = [];
-
-data.move.forEach(m=>{
-
-    let val =
-        scoreVal(m);
-
-    const sp =
-        specAt(
-            game,
-            m.r,
-            m.c
-        );
-
-    if(
-        sp === "D" ||
-        sp === "C"
-    ){
-        val *= 2;
-    }
-
-    if(
-        sp === "T"
-    ){
-        val *= 3;
-    }
-
-    pts += val;
-
-    valeurs.push(
-        m.isJoker
-            ? 0
-            : m.val
-    );
-
-});
-
-/* règle du trio */
-
 if(
-    valeurs.length === 3
+    lines.length > 0
 ){
-    const somme =
-        valeurs.reduce(
-            (a,b)=>a+b,
-            0
-        );
 
-    if(
-        somme === 15
-    ){
-        pts = 30;
-    }
+    lines.forEach(line=>{
+
+        const vals =
+            line.map(
+                x=>scoreVal(x.tok)
+            );
+
+        const sum =
+            vals.reduce(
+                (a,b)=>a+b,
+                0
+            );
+
+        if(
+            line.length === 2
+        ){
+
+            pts += sum;
+
+        }
+        else if(
+            line.length === 3
+        ){
+
+            const evSum =
+                line
+                .map(
+                    x=>
+                        x.tok.isJoker
+                        ? x.tok.jokerVal
+                        : x.tok.val
+                )
+                .reduce(
+                    (a,b)=>a+b,
+                    0
+                );
+
+            if(
+                evSum === 15
+            ){
+
+                pts += 30;
+
+                const allNew =
+                    line.every(
+                        l=>
+                            data.move.some(
+                                m=>
+                                    m.r===l.r &&
+                                    m.c===l.c
+                            )
+                    );
+
+                const hasJoker =
+                    line.some(
+                        l=>l.tok.isJoker
+                    );
+
+                if(
+                    allNew &&
+                    !hasJoker
+                ){
+                    pts += 50;
+                }
+
+            }
+
+        }
+
+    });
 
 }
+else{
 
-currentPlayer.score += pts;
+    data.move.forEach(m=>{
+
+        pts += scoreVal(m);
+
+    });
+
+}
 
 
 
