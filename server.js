@@ -403,6 +403,74 @@ console.log(
     "LINES",
     JSON.stringify(lines)
 );
+
+let valid = true;
+
+let errorMsg = "";
+
+lines.forEach(line=>{
+
+    if(line.length > 3){
+
+        valid = false;
+
+        errorMsg =
+            "❌ Maximum 3 jetons côte à côte";
+
+    }
+
+    const sum =
+        line
+        .map(
+            x =>
+                x.tok.isJoker
+                    ? x.tok.jokerVal
+                    : x.tok.val
+        )
+        .reduce(
+            (a,b)=>a+b,
+            0
+        );
+
+    if(
+        line.length === 2 &&
+        sum > 15
+    ){
+
+        valid = false;
+
+        errorMsg =
+            `❌ Cette paire fait ${sum} (>15)`;
+
+    }
+
+    if(
+        line.length === 3 &&
+        sum !== 15
+    ){
+
+        valid = false;
+
+        errorMsg =
+            `❌ Ce trio fait ${sum} au lieu de 15`;
+
+    }
+
+});
+
+    
+if(!valid){
+
+    socket.emit(
+        "invalidMove",
+        "❌ Coup invalide"
+    );
+
+    return;
+
+}
+
+
 //fin			
 			
 
@@ -550,6 +618,19 @@ if(
             (a,b)=>a+b,
             0
         );
+		
+		console.log(
+    "TRIO",
+    line.map(
+        x =>
+            x.tok.isJoker
+            ? x.tok.jokerVal
+            : x.tok.val
+    ),
+    "SOMME",
+    evSum
+);
+
 
     if(
         evSum === 15
@@ -596,7 +677,11 @@ if(
             }
 
         });
-
+console.log(
+    "TRIO VALIDE",
+    "MULT",
+    mult
+);
         pts += 30 * mult;
 
         const allNew =

@@ -1812,6 +1812,18 @@ if(
     }
 );
 
+socket.on(
+    "invalidMove",
+    msg=>{
+
+        addLog(
+            msg,
+            "b"
+        );
+
+    }
+);
+
 
 socket.on(
   "joinError",
