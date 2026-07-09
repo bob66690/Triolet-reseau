@@ -200,6 +200,7 @@ function affectedLines(game,move){
 function createGame(players){
 
     const sac = [];
+	
 
     Object.entries(DISTRIB)
     .forEach(([v,q])=>{
@@ -285,7 +286,8 @@ board:Array(15)
 
     pend:[],
 
-    rejouer:false
+    rejouer:false,
+	logs:[]
 
 
     };
@@ -660,6 +662,11 @@ else{
 }
 
 currentPlayer.score += pts;
+
+game.logs.push(
+    `${currentPlayer.name} : +${pts} pts`
+);
+
 
 if(
     game.sac.length === 0 &&

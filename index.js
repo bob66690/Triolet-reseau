@@ -1758,6 +1758,40 @@ socket.on(
         G.pend = [];
 
         selIdx = null;
+		
+	document
+    .getElementById('modal-ech')
+    ?.classList.remove('on');	
+		
+		
+		if(
+    gameState.logs
+){
+    const box =
+        document.getElementById(
+            "logbox"
+        );
+
+    box.innerHTML = "";
+
+    [...gameState.logs]
+        .slice(-20)
+        .reverse()
+        .forEach(msg=>{
+
+            const p =
+                document.createElement("p");
+
+            p.textContent = msg;
+
+            box.appendChild(p);
+
+        });
+}
+		
+		
+		
+		
 if(G.rejouer){
 
     addLog(
