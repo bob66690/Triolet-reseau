@@ -894,15 +894,25 @@ game.logs.push(
         evSum === 15
     ){
 
-       let mult = 1;
+     let mult = 1;
 
-data.move.forEach(m=>{
+line.forEach(cell=>{
+
+    const estNouveau =
+        data.move.some(
+            m =>
+                m.r === cell.r &&
+                m.c === cell.c
+        );
+
+    if(!estNouveau)
+        return;
 
     const sp =
         specAt(
             game,
-            m.r,
-            m.c
+            cell.r,
+            cell.c
         );
 
     if(
