@@ -523,19 +523,7 @@ lines.forEach(line=>{
 
     }
 	
-	// interdit plus de 3 jetons !!
-	if(
-    line.length === 1
-){
-
-    valid = false;
-
-    errorMsg =
-        "❌ Coup non relié";
-
-}
 	
-	//fin interdit plus de 3  jetons
 
     const sum =
         line
@@ -575,17 +563,21 @@ lines.forEach(line=>{
     }
 
 });
-console.log(
-    "VALIDATION",
-    errorMsg
-);
+if(!valid){
+
+    console.log(
+        "VALIDATION REFUSEE :",
+        errorMsg
+    );
+
+}
     
 if(!valid){
 
     socket.emit(
-        "invalidMove",
-        "❌ Coup invalide"
-    );
+    "invalidMove",
+    errorMsg
+);
 
     return;
 
