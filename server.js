@@ -822,6 +822,9 @@ console.log(
     });
 
     pts += pairPts;
+game.logs.push(
+    `PAIRE = ${pairPts}`
+);
 
 }
         else 
@@ -859,53 +862,53 @@ console.log(
         evSum === 15
     ){
 
-        let mult = 1;
+       let mult = 1;
 
-        line.forEach(l=>{
+data.move.forEach(m=>{
 
-            const joueCeTour =
-                data.move.find(
-                    m =>
-                        m.r === l.r &&
-                        m.c === l.c
-                );
+    const sp =
+        specAt(
+            game,
+            m.r,
+            m.c
+        );
 
-            if(!joueCeTour)
-                return;
+    if(
+        sp === "D" ||
+        sp === "C"
+    ){
+        mult = Math.max(
+            mult,
+            2
+        );
+    }
 
-            const sp =
-                specAt(
-                    game,
-                    l.r,
-                    l.c
-                );
+    if(
+        sp === "T"
+    ){
+        mult = Math.max(
+            mult,
+            3
+        );
+    }
 
-            if(
-                sp === "D" ||
-                sp === "C"
-            ){
-                mult = Math.max(
-                    mult,
-                    2
-                );
-            }
+});
 
-            if(
-                sp === "T"
-            ){
-                mult = Math.max(
-                    mult,
-                    3
-                );
-            }
 
-        });
 console.log(
     "TRIO VALIDE",
     "MULT",
     mult
 );
-        pts += 30 * mult;
+        
+		game.logs.push(
+    `DEBUG MULT=${mult}`
+);
+		pts += 30 * mult;
+		
+game.logs.push(
+    `TRIO = ${30 * mult}`
+);
 
         const allNew =
             line.every(
@@ -927,6 +930,9 @@ console.log(
             !hasJoker
         ){
             pts += 50;
+			game.logs.push(
+    `BONUS TRIOLET = 50`
+);
         }
 
     }
@@ -968,7 +974,9 @@ else{
     });
 
 }
-
+game.logs.push(
+    `DEBUG SCORE = ${pts}`
+);
 currentPlayer.score += pts;
 
 const detail =
