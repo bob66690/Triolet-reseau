@@ -225,6 +225,90 @@ function hasAdjacentTile(game,r,c){
 
 }
 
+function isContinuous(game,move){
+
+    const board =
+        game.board.map(
+            row=>row.map(
+                c=>c ? {...c} : null
+            )
+        );
+
+    move.forEach(m=>{
+
+        board[m.r][m.c]={
+            val:m.val,
+            isJoker:m.isJoker,
+            jokerVal:m.jokerVal
+        };
+
+    });
+
+    const rows =
+        [...new Set(
+            move.map(m=>m.r)
+        )];
+
+    const cols =
+        [...new Set(
+            move.map(m=>m.c)
+        )];
+
+    if(rows.length === 1){
+
+        const r = rows[0];
+
+        let min =
+            Math.min(
+                ...move.map(m=>m.c)
+            );
+
+        let max =
+            Math.max(
+                ...move.map(m=>m.c)
+            );
+
+        for(let c=min;c<=max;c++){
+
+            if(
+                board[r][c] === null
+            ){
+                return false;
+            }
+
+        }
+
+    }
+
+    if(cols.length === 1){
+
+        const c = cols[0];
+
+        let min =
+            Math.min(
+                ...move.map(m=>m.r)
+            );
+
+        let max =
+            Math.max(
+                ...move.map(m=>m.r)
+            );
+
+        for(let r=min;r<=max;r++){
+
+            if(
+                board[r][c] === null
+            ){
+                return false;
+            }
+
+        }
+
+    }
+
+    return true;
+
+}
 
 
 function createGame(players){
@@ -461,7 +545,7 @@ if(game.first){
 if(!game.first){
 
     const connected =
-        data.move.every(
+        data.move.some(
             m =>
                 hasAdjacentTile(
                     game,
@@ -501,7 +585,8 @@ const cols =
 if(
     rows.length > 1 &&
     cols.length > 1
-){
+)
+{
 
     valid = false;
 
@@ -509,6 +594,21 @@ if(
         "❌ Les jetons doivent être sur la même ligne ou colonne";
 
 }
+
+if(
+    !isContinuous(
+        game,
+        data.move
+    )
+){
+
+    valid = false;
+
+    errorMsg =
+        "❌ Les jetons doivent former une ligne continue";
+
+}
+
 
 
 
