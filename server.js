@@ -768,6 +768,7 @@ idxs.forEach(()=>{
 /* calcul compliqué des points */
 
 let pts = 0;
+const usedThisTurn = new Set();
 
 if(
     lines.length > 0
@@ -908,12 +909,21 @@ line.forEach(cell=>{
     if(!estNouveau)
         return;
 
-    const sp =
-        specAt(
-            game,
-            cell.r,
-            cell.c
-        );
+    const key =
+    cell.r + "," + cell.c;
+
+if(
+    usedThisTurn.has(key)
+){
+    return;
+}
+
+const sp =
+    specAt(
+        game,
+        cell.r,
+        cell.c
+    );
 
     if(
         sp === "D" ||
@@ -991,12 +1001,21 @@ else{
         let val =
             scoreVal(m);
 
-        const sp =
-            specAt(
-                game,
-                m.r,
-                m.c
-            );
+        const key =
+    cell.r + "," + cell.c;
+
+if(
+    usedThisTurn.has(key)
+){
+    return;
+}
+
+const sp =
+    specAt(
+        game,
+        cell.r,
+        cell.c
+    );
 
         if(
             sp === "C" ||
@@ -1122,12 +1141,21 @@ let rejouer = false;
 
 data.move.forEach(m=>{
 
-    const sp =
-        specAt(
-            game,
-            m.r,
-            m.c
-        );
+    const key =
+    cell.r + "," + cell.c;
+
+if(
+    usedThisTurn.has(key)
+){
+    return;
+}
+
+const sp =
+    specAt(
+        game,
+        cell.r,
+        cell.c
+    );
 
     if(sp === "R"){
 
