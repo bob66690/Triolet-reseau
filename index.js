@@ -1800,6 +1800,38 @@ if(G.rejouer){
     );
 
 }
+
+// journal
+if(gameState.logs){
+
+    const box =
+        document.getElementById(
+            "logbox"
+        );
+
+    box.innerHTML = "";
+
+    [...gameState.logs]
+        .slice(-30)
+        .reverse()
+        .forEach(msg=>{
+
+            const p =
+                document.createElement("p");
+
+            p.textContent = msg;
+
+            box.appendChild(p);
+
+        });
+
+}
+// fin journal
+
+
+
+
+
         render();
 if(
     G.over

@@ -194,6 +194,36 @@ function affectedLines(game,move){
 
 }
 
+// teste que les pions touchent d'autres pions posés
+function hasAdjacentTile(game,r,c){
+
+    const dirs = [
+        [-1,0],
+        [1,0],
+        [0,-1],
+        [0,1]
+    ];
+
+    for(const [dr,dc] of dirs){
+
+        const nr = r + dr;
+        const nc = c + dc;
+
+        if(
+            nr >= 0 &&
+            nr < 15 &&
+            nc >= 0 &&
+            nc < 15 &&
+            game.board[nr][nc] !== null
+        ){
+            return true;
+        }
+
+    }
+
+    return false;
+
+}
 
 
 
@@ -407,6 +437,80 @@ console.log(
 let valid = true;
 
 let errorMsg = "";
+if(game.first){
+
+    const center =
+        data.move.some(
+            m =>
+                m.r === 7 &&
+                m.c === 7
+        );
+
+    if(!center){
+
+        valid = false;
+
+        errorMsg =
+            "❌ Le premier coup doit couvrir H8";
+
+    }
+
+}
+
+// teste coup adjacent obligatoire
+if(!game.first){
+
+    const connected =
+        data.move.every(
+            m =>
+                hasAdjacentTile(
+                    game,
+                    m.r,
+                    m.c
+                )
+        );
+
+    if(!connected){
+
+        valid = false;
+
+        errorMsg =
+            "❌ Le coup doit toucher un jeton déjà présent";
+
+    }
+
+}
+
+
+
+
+const rows =
+    [...new Set(
+        data.move.map(
+            m => m.r
+        )
+    )];
+
+const cols =
+    [...new Set(
+        data.move.map(
+            m => m.c
+        )
+    )];
+
+if(
+    rows.length > 1 &&
+    cols.length > 1
+){
+
+    valid = false;
+
+    errorMsg =
+        "❌ Les jetons doivent être sur la même ligne ou colonne";
+
+}
+
+
 
 lines.forEach(line=>{
 
@@ -418,6 +522,20 @@ lines.forEach(line=>{
             "❌ Maximum 3 jetons côte à côte";
 
     }
+	
+	// interdit plus de 3 jetons !!
+	if(
+    line.length === 1
+){
+
+    valid = false;
+
+    errorMsg =
+        "❌ Coup non relié";
+
+}
+	
+	//fin interdit plus de 3  jetons
 
     const sum =
         line
@@ -748,6 +866,51 @@ else{
 
 currentPlayer.score += pts;
 
+const detail =
+    data.move.map(m=>
+        m.isJoker
+            ? `X(${m.jokerVal})`
+            : m.val
+    ).join("-");
+
+let msg = "";
+
+if(data.move.length === 3){
+
+    if(pts >= 80){
+
+        msg =
+            `🎉 TRIOLET - ${currentPlayer.name} joue [${detail}] : +${pts} pts`;
+
+    }else{
+
+        msg =
+            `🔺 TRIO - ${currentPlayer.name} joue [${detail}] : +${pts} pts`;
+
+    }
+
+}
+else if(data.move.length === 2){
+
+    msg =
+        `⚡ PAIRE - ${currentPlayer.name} joue [${detail}] : +${pts} pts`;
+
+}
+else{
+
+    msg =
+        `🎯 ${currentPlayer.name} joue [${detail}] : +${pts} pts`;
+
+}
+
+game.logs.push(msg);
+
+game.logs.push(
+    `🏆 Total ${currentPlayer.name} : ${currentPlayer.score}`
+);
+
+
+
 game.logs.push(
     `${currentPlayer.name} : +${pts} pts`
 );
@@ -782,6 +945,9 @@ if(
     game.over = true;
 
 }
+
+game.first = false;
+
 if(
     game.sac.length === 0 &&
     currentPlayer.hand.length === 0
@@ -795,7 +961,7 @@ console.log(
     currentPlayer.score
 );
 
-// fin ajaout calcul points
+// fin ajout calcul points
 // rejouer
 let rejouer = false;
 
@@ -811,6 +977,9 @@ data.move.forEach(m=>{
     if(sp === "R"){
 
         rejouer = true;
+game.logs.push(
+    `🔁 ${currentPlayer.name} obtient un tour supplémentaire`
+);
 
     }
 
@@ -988,7 +1157,11 @@ if(game.over){
         )
         %
         game.joueurs.length;
-
+//journal
+game.logs.push(
+    `⏭️ ${currentPlayer.name} passe son tour`
+);
+//fin journal
         io.to(data.roomCode).emit(
             "stateUpdate",
             game
@@ -1052,6 +1225,13 @@ if(game.over){
         )
         %
         game.joueurs.length;
+
+//journal
+game.logs.push(
+    `🔄 ${currentPlayer.name} échange ${removed.length} jeton(s)`
+);
+//fin journal
+
 
         io.to(data.roomCode).emit(
             "stateUpdate",
