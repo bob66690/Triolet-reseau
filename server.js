@@ -575,7 +575,10 @@ lines.forEach(line=>{
     }
 
 });
-
+console.log(
+    "VALIDATION",
+    errorMsg
+);
     
 if(!valid){
 
@@ -669,7 +672,17 @@ if(
                 (a,b)=>a+b,
                 0
             );
-
+// log temporaire
+console.log(
+    "LINE",
+    line.map(
+        x =>
+            x.tok.isJoker
+                ? `X(${x.tok.jokerVal})`
+                : x.tok.val
+    )
+);
+// fin log temporaire
         if(
     line.length === 2
 ){
