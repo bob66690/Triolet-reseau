@@ -768,7 +768,7 @@ idxs.forEach(()=>{
 /* calcul compliqué des points */
 
 let pts = 0;
-const usedThisTurn = new Set();
+
 
 if(
     lines.length > 0
@@ -909,14 +909,7 @@ line.forEach(cell=>{
     if(!estNouveau)
         return;
 
-    const key =
-    cell.r + "," + cell.c;
-
-if(
-    usedThisTurn.has(key)
-){
-    return;
-}
+    
 
 const sp =
     specAt(
@@ -1001,21 +994,13 @@ else{
         let val =
             scoreVal(m);
 
-        const key =
-    cell.r + "," + cell.c;
+        const sp =
+            specAt(
+                game,
+                m.r,
+                m.c
+            );
 
-if(
-    usedThisTurn.has(key)
-){
-    return;
-}
-
-const sp =
-    specAt(
-        game,
-        cell.r,
-        cell.c
-    );
 
         if(
             sp === "C" ||
@@ -1141,32 +1126,26 @@ let rejouer = false;
 
 data.move.forEach(m=>{
 
-    const key =
-    cell.r + "," + cell.c;
-
-if(
-    usedThisTurn.has(key)
-){
-    return;
-}
-
-const sp =
-    specAt(
-        game,
-        cell.r,
-        cell.c
-    );
+    const sp =
+        specAt(
+            game,
+            m.r,
+            m.c
+        );
 
     if(sp === "R"){
 
         rejouer = true;
-game.logs.push(
-    `🔁 ${currentPlayer.name} obtient un tour supplémentaire`
-);
+
+        game.logs.push(
+            `🔁 ${currentPlayer.name} obtient un tour supplémentaire`
+        );
 
     }
 
 });
+
+    
 
 
 
@@ -1471,37 +1450,9 @@ game.logs.push(
     }
 );
 
-socket.on(
-    "getRooms",
-    ()=>{
 
-        const list =
-            Object.entries(rooms)
-            .filter(
-                ([code,room])=>
-                    !room.game
-            )
-            .map(
-                ([code,room])=>({
 
-                    code,
-
-                    host:
-                        room.players[0]?.name,
-
-                    players:
-                        room.players.length
-
-                })
-            );
-
-        socket.emit(
-            "roomsList",
-            list
-        );
-
-    }
-);
+  
 
 
 });
