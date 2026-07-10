@@ -1615,6 +1615,69 @@ function prepareStartDraw(){
 document.addEventListener('DOMContentLoaded',()=>{
 
 socket = io();
+
+socket.emit(
+    "getRooms"
+);
+
+socket.on(
+    "roomsChanged",
+    ()=>{
+
+        socket.emit(
+            "getRooms"
+        );
+
+    }
+);
+
+socket.on(
+    "roomsList",
+    rooms=>{
+
+        const div =
+            document.getElementById(
+                "rooms-list"
+            );
+
+        if(!div)
+            return;
+
+        div.innerHTML = "";
+
+        rooms.forEach(room=>{
+
+            const btn =
+                document.createElement(
+                    "button"
+                );
+
+            btn.className =
+                "room-item";
+
+            btn.textContent =
+                `🎮 ${room.host} (${room.players})`;
+
+            btn.onclick = ()=>{
+
+                document
+                    .getElementById(
+                        "room-code"
+                    )
+                    .value =
+                    room.code;
+
+            };
+
+            div.appendChild(
+                btn
+            );
+
+        });
+
+    }
+);
+
 socket.on("connect",()=>{
 
     console.log(

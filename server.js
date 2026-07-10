@@ -1184,7 +1184,49 @@ console.log(
             "playersUpdate",
             rooms[roomCode].players
         );
+		io.emit(
+			"roomsChanged"
+		);
+		
+		
     });
+	
+	
+	// ajout liste des salons disponibles
+	socket.on(
+    "getRooms",
+    ()=>{
+
+        const list =
+            Object.entries(rooms)
+            .filter(([code,room])=>
+                !room.game
+            )
+            .map(([code,room])=>({
+
+                code,
+
+                host:
+                    room.players[0]?.name,
+
+                players:
+                    room.players.length
+
+            }));
+
+        socket.emit(
+            "roomsList",
+            list
+        );
+
+    }
+);
+	
+	
+	
+	// fin ajout salons disponbles
+	
+	
 
     socket.on(
         "joinRoom",
@@ -1229,6 +1271,11 @@ console.log(
                 "playersUpdate",
                 rooms[roomCode].players
             );
+			io.emit(
+				"roomsChanged"
+				);
+			
+			
         }
     );
 
@@ -1346,7 +1393,37 @@ game.logs.push(
     }
 );
 
+socket.on(
+    "getRooms",
+    ()=>{
 
+        const list =
+            Object.entries(rooms)
+            .filter(
+                ([code,room])=>
+                    !room.game
+            )
+            .map(
+                ([code,room])=>({
+
+                    code,
+
+                    host:
+                        room.players[0]?.name,
+
+                    players:
+                        room.players.length
+
+                })
+            );
+
+        socket.emit(
+            "roomsList",
+            list
+        );
+
+    }
+);
 
 
 });
