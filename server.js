@@ -183,8 +183,25 @@ function affectedLines(game,move){
                     dc
                 );
 
-            if(l.length>=2)
-                res.push(l);
+            if(l.length >= 2){
+
+    const signature =
+        l.map(
+            x => `${x.r},${x.c}`
+        ).join("|");
+
+    if(
+        !seen.has(signature)
+    ){
+
+        seen.add(signature);
+
+        res.push(l);
+
+    }
+
+}
+
 
         });
 
@@ -513,6 +530,10 @@ const lines =
         data.move
     );
 	
+	game.logs.push(
+    `NB LIGNES = ${lines.length}`
+);
+	
 console.log(
     "LINES",
     JSON.stringify(lines)
@@ -774,6 +795,17 @@ console.log(
                 : x.tok.val
     )
 );
+
+game.logs.push(
+    `DEBUG LINE ${line.map(
+        x =>
+            x.tok.isJoker
+            ? `X(${x.tok.jokerVal})`
+            : x.tok.val
+    ).join("-")}`
+);
+
+
 // fin log temporaire
         if(
     line.length === 2
